@@ -34,8 +34,20 @@ if (!res.ok) {
       ? data
       : data?.message || data?.error || "Request failed";
 
+  // 🔑 token invalid / expirat → logout
+  if (
+    res.status === 401 &&
+    (message.toLowerCase().includes("token") ||
+      message.toLowerCase().includes("unauthorized"))
+  ) {
+    localStorage.removeItem("token");
+    window.location.href = "/";
+    return Promise.reject(new Error("Session expired"));
+  }
+
   throw new Error(message);
 }
+
 
 return data;
 }
