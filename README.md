@@ -1,73 +1,106 @@
-# React + TypeScript + Vite
+# Backend Demo UI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a **minimal UI client** built to showcase the behavior, domain flows, and architectural decisions of a backend REST API.
 
-Currently, two official plugins are available:
+The UI is intentionally simple and unopinionated. Its purpose is **not** to be a full product, but to act as a clear, realistic API consumer for demonstration and interview scenarios.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🎯 Purpose
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+This UI exists to demonstrate:
 
-## Expanding the ESLint configuration
+- JWT authentication flow
+- Role-Based Access Control (RBAC) visibility
+- Subscription lifecycle consumption
+- Audit log access (MANAGER-only)
+- Proper handling of token expiration
+- Clean separation between frontend and backend responsibilities
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+The backend remains the **single source of truth**.  
+The UI does not reimplement business logic.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🧠 Design Philosophy
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- **API-first**: the backend is consumed as a black box
+- **No overengineering**: no global state libraries, no complex abstractions
+- **Thin UI**: frontend reflects backend state, it does not infer it
+- **Explicit boundaries**: authentication, authorization, and validation are enforced server-side
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🧩 Features Demonstrated
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- Login using JWT
+- Automatic logout on token expiration
+- Role visibility in UI (USER / ADMIN / MANAGER)
+- Conditional UI rendering based on role
+- Subscription listing from the backend API
+- Audit log access restricted to MANAGER role
+- Manual logout
+
+---
+
+## 🛠 Tech Stack
+
+- React
+- TypeScript
+- Vite
+- Fetch API (custom HTTP client)
+
+---
+
+## 🌐 Deployment
+
+The UI is deployed as a **static site** and consumes a separately deployed backend API.
+
+Environment variable required at build time:
+VITE_API_BASE_URL=https://https://backend-demo-ui.onrender.com/
+
+---
+
+## 🔐 Security Notes
+
+- JWT is stored in `localStorage` (acceptable for demo purposes)
+- Token validity is enforced by the backend
+- Expired or invalid tokens trigger automatic logout
+- UI authorization is **only visual**; backend RBAC is authoritative
+
+---
+
+## 📌 What This UI Is NOT
+
+- Not a production-ready frontend
+- Not a design showcase
+- Not a full CRUD application
+- Not a replacement for backend validation
+
+---
+
+## 🔗 Related Project
+
+This UI is designed to work with the corresponding backend project:
+https://backend-auth-rbac.onrender.com
+https://github.com/gmhpericol/backend-auth-rbac
+
+👉 **Backend REST API**  
+(User, Contract, Subscription, RBAC, Audit, Billing-ready architecture)
+
+---
+
+## 🧪 Demo Flow (Suggested)
+
+1. Login with different roles (USER / ADMIN / MANAGER)
+2. Observe role-based UI changes
+3. View subscriptions
+4. (MANAGER) Access audit log
+5. Wait for token expiration → automatic logout
+
+---
+
+## 🧑‍💻 Author Notes
+
+This project was built as a **technical showcase**, focusing on correctness, clarity, and architectural reasoning rather than feature completeness.
+
