@@ -1,5 +1,4 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-console.log("API BASE URL:", API_BASE_URL);
 
 type HttpMethod = "GET" | "POST" | "PATCH" | "DELETE";
 
@@ -20,15 +19,25 @@ async function request<T>(
   });
 
   const contentType = res.headers.get("content-type");
-  const hasJson = contentType?.includes("application/json");
+  
+  let data: any = null;
 
-  const data = hasJson ? await res.json() : null;
+if (contentType?.includes("application/json")) {
+  data = await res.json();
+} else {
+  data = await res.text();
+}
 
-  if (!res.ok) {
-    throw new Error(data?.message || "Request failed");
-  }
+if (!res.ok) {
+  const message =
+    typeof data === "string"
+      ? data
+      : data?.message || data?.error || "Request failed";
 
-  return data;
+  throw new Error(message);
+}
+
+return data;
 }
 
 export const http = {
