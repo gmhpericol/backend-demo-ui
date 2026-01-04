@@ -1,5 +1,7 @@
+import Subscriptions from "./pages/Subscriptions";
+
 function App() {
-  return <div>Backend Demo UI</div>;
+  return <Subscriptions />;
 }
 
 export default App;
