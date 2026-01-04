@@ -10,11 +10,17 @@ function App() {
   if (!token || !user) {
     return <Login />;
   }
+  function handleLogout() {
+    localStorage.removeItem("token");
+    window.location.href = "/";
+  }
 
   return (
     <div>
       <div>
         Logged in as <strong>{user.role}</strong>
+        <button onClick={handleLogout}>Logout</button>
+        
       </div>
 
       <Subscriptions />
